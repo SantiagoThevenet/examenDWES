@@ -20,6 +20,7 @@ router.get('/', async function (req, res, next) {
 router.get('/create', function (req, res, next) {
   res.render('crear');
 });
+
 router.post('/create', async function (req, res, next) {
   const { url, titulo, descripcion } = req.body
   const crearForm = {
@@ -35,16 +36,59 @@ router.post('/create', async function (req, res, next) {
   res.redirect('/fotos')
 });
 
-router.get('/edit', function (req, res, next) {
-  res.render('editar');
+router.get('/edit/:id', function (req, res, next) {
+  res.render('editar',{
+    id: req.params.id,
+    url: req.query.url,
+    titulo: req.query.titulo,
+  });
 });
 
-router.get('/masvotadas', function (req, res, next) {
-  res.send("masvotadas")
+router.post('/edit/:id', async function (req, res, next) {
+  const crearForm = req.body
+  const id = req.params.id
+  const result = await pool.promise().query("UPDATE fotos SET ? WHERE id= ?", [crearForm,id])
+  
+  res.redirect('/fotos')
 });
 
-router.get('/menosvotadas', function (req, res, next) {
-  res.send("menosvotadas")
+router.get('/delete/:id', async function (req, res, next) {
+  const id = Number(req.params.id)
+
+  const result = await pool.promise().query("DELETE from fotos WHERE id = ?", [id])
+
+  res.redirect("/fotos")
 });
 
+router.get('/like/:id',async function (req, res, next) {
+  const id = req.params.id
+  const result = await pool.promise().query("UPDATE fotos SET likes=likes+1 WHERE id= ?", [id])
+  res.redirect("/fotos")
+});
+
+
+router.get('/dislike/:id', async function (req, res, next) {
+  const id = req.params.id
+  const result = await pool.promise().query("UPDATE fotos SET dislikes=dislikes+1 WHERE id= ?", [id])
+  res.redirect("/fotos")
+});
+
+router.get('/masvotadas', async function (req, res, next) {
+  let [result] = await pool.promise().query("SELECT * FROM fotos")
+  
+  result = result.sort((a,b) => b.likes - a.likes)
+  
+  res.render('index', {
+    fotos: result
+  });
+});
+
+router.get('/menosvotadas', async function (req, res, next) {
+  let [result] = await pool.promise().query("SELECT * FROM fotos")
+  result = result.sort((a,b) => b.dislikes - a.dislikes)
+
+  res.render('index', {
+    fotos: result
+  });
+});
 module.exports = router;
