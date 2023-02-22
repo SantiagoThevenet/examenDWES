@@ -1,12 +1,17 @@
+const dotenv = require("dotenv")
+dotenv.config()
+
 const express = require('express');
 const router = express.Router();
 const mysql = require("mysql2/promise")
+const { MYSQL_HOST,  MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE } = require("../db/conf")
+console.log(MYSQL_HOST,  MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE);
 
 const { pool } = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "1234",
-  database: "fotosDB"
+  host: MYSQL_HOST,
+  user: MYSQL_USER,
+  password: MYSQL_PASSWORD,
+  database: MYSQL_DATABASE
 })
 
 
@@ -111,12 +116,12 @@ router.get('/menosvotadas', async function (req, res, next) {
 });
 
 router.post('/comment/:id', async function (req, res, next) {
-  const {userComment ,comentario} = req.body
+  const { userComment, comentario } = req.body
   const id = req.params.id
   const [[ultimoComent]] = await pool.promise().query("SELECT comment from fotos")
 
   let comment = ` ${userComment}: ${comentario} `
-  comment = `${ultimoComent.comment} \n ${comment} ` 
+  comment = `${ultimoComent.comment} \n ${comment} `
   const result = await pool.promise().query("UPDATE fotos SET comment = ? WHERE id = ?", [comment, id])
 
   res.redirect("/fotos")
