@@ -13,6 +13,12 @@ const { pool } = mysql.createPool({
   password: MYSQL_PASSWORD,
   database: MYSQL_DATABASE
 })
+// const { pool } = mysql.createPool({
+//   host: "localhost",
+//   user: "root",
+//   password: "1234",
+//   port: 3307,
+// })
 
 
 router.get('/', async function (req, res, next) {
