@@ -115,8 +115,8 @@ router.post('/comment/:id', async function (req, res, next) {
   const id = req.params.id
   const [[ultimoComent]] = await pool.promise().query("SELECT comment from fotos")
 
-  let comment = `${userComment}: ${comentario}`
-  comment = `${ultimoComent.comment}${comment}` 
+  let comment = ` ${userComment}: ${comentario} `
+  comment = `${ultimoComent.comment} \n ${comment} ` 
   const result = await pool.promise().query("UPDATE fotos SET comment = ? WHERE id = ?", [comment, id])
 
   res.redirect("/fotos")
