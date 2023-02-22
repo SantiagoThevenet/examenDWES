@@ -1,0 +1,25 @@
+body{
+    background-image: url("https://marketplace.canva.com/EAFHm4JWsu8/1/0/1600w/canva-pink-landscape-desktop-wallpaper-HGxdJA_xIx0.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.navegar{
+    margin-bottom: 15rem;
+    background-color: rgb(74, 158, 159);
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+a{
+    text-decoration: none;
+    font-size: 2rem;
+    margin: 0 1rem;
+    color: white;
+}

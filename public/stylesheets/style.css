@@ -2,6 +2,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+
 }
 
 
@@ -86,7 +88,10 @@ textarea{
   border-radius: 8px;
   width: 10rem;
 }
-
+#foromComment{
+  background-color: rgb(210, 210, 210);
+  border: 1px solid;
+}
 #descripcion{
   margin-bottom: 1rem;
 }

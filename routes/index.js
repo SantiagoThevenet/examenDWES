@@ -9,13 +9,15 @@ const { pool } = mysql.createPool({
   database: "fotosDB"
 })
 
+
 router.get('/', async function (req, res, next) {
   const [result] = await pool.promise().query("SELECT * FROM fotos")
-  console.log(result);
   res.render('index', {
     fotos: result
   });
 });
+
+
 
 router.get('/create', function (req, res, next) {
   res.render('crear');
@@ -26,18 +28,19 @@ router.post('/create', async function (req, res, next) {
   const crearForm = {
     url,
     titulo,
-    descripcion ,
+    descripcion,
     likes: 0,
     dislikes: 0
   }
-  console.log(crearForm);
   const result = await pool.promise().query("INSERT INTO fotos SET ?", [crearForm])
-  console.log(result);
   res.redirect('/fotos')
 });
 
+
+
+
 router.get('/edit/:id', function (req, res, next) {
-  res.render('editar',{
+  res.render('editar', {
     id: req.params.id,
     url: req.query.url,
     titulo: req.query.titulo,
@@ -47,10 +50,13 @@ router.get('/edit/:id', function (req, res, next) {
 router.post('/edit/:id', async function (req, res, next) {
   const crearForm = req.body
   const id = req.params.id
-  const result = await pool.promise().query("UPDATE fotos SET ? WHERE id= ?", [crearForm,id])
-  
+  const result = await pool.promise().query("UPDATE fotos SET ? WHERE id= ?", [crearForm, id])
+
   res.redirect('/fotos')
 });
+
+
+
 
 router.get('/delete/:id', async function (req, res, next) {
   const id = Number(req.params.id)
@@ -60,11 +66,18 @@ router.get('/delete/:id', async function (req, res, next) {
   res.redirect("/fotos")
 });
 
-router.get('/like/:id',async function (req, res, next) {
+
+
+
+router.get('/like/:id', async function (req, res, next) {
   const id = req.params.id
   const result = await pool.promise().query("UPDATE fotos SET likes=likes+1 WHERE id= ?", [id])
   res.redirect("/fotos")
 });
+
+
+
+
 
 
 router.get('/dislike/:id', async function (req, res, next) {
@@ -73,22 +86,42 @@ router.get('/dislike/:id', async function (req, res, next) {
   res.redirect("/fotos")
 });
 
+
+
+
 router.get('/masvotadas', async function (req, res, next) {
   let [result] = await pool.promise().query("SELECT * FROM fotos")
-  
-  result = result.sort((a,b) => b.likes - a.likes)
-  
+
+  result = result.sort((a, b) => b.likes - a.likes)
+
   res.render('index', {
     fotos: result
   });
 });
+
+
 
 router.get('/menosvotadas', async function (req, res, next) {
   let [result] = await pool.promise().query("SELECT * FROM fotos")
-  result = result.sort((a,b) => b.dislikes - a.dislikes)
+  result = result.sort((a, b) => b.dislikes - a.dislikes)
 
   res.render('index', {
     fotos: result
   });
 });
+
+router.post('/comment/:id', async function (req, res, next) {
+  const {userComment ,comentario} = req.body
+  const id = req.params.id
+  const [[ultimoComent]] = await pool.promise().query("SELECT comment from fotos")
+
+  let comment = `${userComment}: ${comentario}`
+  comment = `${ultimoComent.comment}${comment}` 
+  const result = await pool.promise().query("UPDATE fotos SET comment = ? WHERE id = ?", [comment, id])
+
+  res.redirect("/fotos")
+});
+
+
+
 module.exports = router;

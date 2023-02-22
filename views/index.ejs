@@ -21,6 +21,17 @@
                 <a href="fotos/delete/<%= fotos[i].id%>" class="button">Borrar</a>
                 <a href="fotos/edit/<%= fotos[i].id %>?titulo=<%= fotos[i].titulo %>&&url=<%= fotos[i].url %>" class="button">Editar</a>
             </div>
+            <div class="comentarios">
+                <h2>Comentarios</h2>
+                <p><%= fotos[i].comment %></p>
+            </div>
+            <div>
+                <form id="foromComment" action="/fotos/comment/<%= fotos[i].id %>" method="post">
+                    <input type="text" name="userComment" placeholder="Usuario" required>
+                    <input type="text" name="comentario" placeholder="Comentar" required>
+                    <input class="sendButton" type="submit">
+                </form>
+            </div>
         </div>
     <% } %>
 </main>
