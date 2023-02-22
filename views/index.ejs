@@ -1,18 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li></li>
-            </ul>
-        </nav>
-    </header>
-</body>
-</html>
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+<main>
+    <% for( let i = 0; i < fotos.length; i++ ) { %>
+        <div class="mostrarImgs">
+            <img src="<%= fotos[i].url %>" alt="">
+            <h1><%= fotos[i].titulo %></h1>
+            <p><%= fotos[i].fecha %></p>
+            <div>
+                <div class="datosLike">
+                    <span><%= fotos[i].likes %></span>
+                    <span><%= fotos[i].dislikes %></span>
+                </div>
+                <div class="botonesLike">
+                    <button>Like</button>
+                    <button>Dislikes</button>
+                </div>
+            </div>
+            <div>
+                <button>Borrar</button>
+                <button>Editar</button>
+            </div>
+        </div>
+    <% } %>
+</main>
+<%- include('partials/footer') %>
